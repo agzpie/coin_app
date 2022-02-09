@@ -1,22 +1,30 @@
 <template>
-    <div>
-        <hr>
-        <p class="coin-header">
-            <span class="coin-name"> coind id </span>
-            &ensp;
-            <svg class="icon" width="15" height="13" viewBox="0 0 15 14" xmlns="http://www.w3.org/2000/svg">
-                <path class="icon" d="M7.5 1L9.33389 4.97587L13.6819 5.49139L10.4673 8.46413L11.3206 12.7586L7.5 10.62L3.6794 12.7586L4.5327 8.46413L1.31813 5.49139L5.66611 4.97587L7.5 1Z" stroke-width="1.2" stroke-linejoin="round"/>
-            </svg>
-
-            <span class="symbol"> coin symbol</span>
-        </p>
-        <p class="desc"> coin current_price </p>
-    </div>
+<tr>
+    <td>
+        {{ coin.market_cap_rank }}
+    </td>
+    <td>
+        <img :src="coin.image" width="15" height="15">
+        <span class="coin-name">{{ coin.id }}</span>
+        {{ coin.symbol }}
+    </td>
+    <td>
+        <span class="symbol"> {{ coin.current_price }} € </span>
+    </td>        
+    <td>
+        <span class="desc">{{ coin.price_change_percentage_24h }} %</span>
+    </td> 
+    <td>
+        <span class="desc">{{ coin.total_volume }} €</span>
+    </td>
+</tr>
+           
+    
 </template>
 
 <script>
 export default {
-    //props: [ 'coin' ],
+   props: [ 'coin' ],
 }
 </script>
 

@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <List />
+    <Suspense>
+      <List />
+    </Suspense>
+      
+
   </div>
 </template>
 

@@ -33,18 +33,51 @@
       but don't worry and try again!
     </h4>
 
-    <ListElement />
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Coin</th>
+            <th>Price</th>
+            <th>Price Change</th>
+            <th>24 Volume</th>
+        </tr>
+        <ListElement 
+    v-for="item in coins"
+    :key="item.id"
+    :coin="item"
+    />
+    </table>
+    
+    
 </div>
 </template>
 
 <script>
 import ListElement from "./ListElement.vue";
-//import { ref, reactive, toRefs, watchEffect, computed } from "vue";
+import axios from "axios";
+
 export default {
   name: "App",
   components: {
     ListElement,
   },
+  data() {
+    return {
+      coins: [],
+      errors: []
+    }
+  },
+
+  // Fetches posts when the component is created.
+  async created() {
+    try {
+      const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+      this.coins = response.data
+      console.log(this.coins)
+    } catch (e) {
+      this.errors.push(e)
+    }
+  }
 
 };
 </script>
