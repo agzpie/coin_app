@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container-md">
     <Suspense>
       <List />
     </Suspense>
@@ -29,7 +29,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
-}
+}/*
 .main {
   width: fit-content;
   margin: auto;
@@ -40,6 +40,6 @@ body {
   transition: 3s;
   transition-timing-function: ease;
   align-content: space-around;
-}
+}*/
 
 </style>
