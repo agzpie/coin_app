@@ -31,13 +31,15 @@
         v-if="coins"
         :totalRecords="coins.length" 
         :perPageOptions="perPageOptions"
-        v-model="pagination"    
+        v-model="pagination" 
+        ref="searchField"   
     />
     </div>
 </div>
 </template>
 
 <script>
+// TODO: reset coin list!!!! And detailed view
 import ListElement from "./ListElement.vue";
 import Pagination from "./Pagination.vue";
 import axios from "axios";
@@ -48,7 +50,7 @@ export default {
     name: "App",
     components: {
         ListElement,
-        Pagination
+        Pagination,
     },
     data: function () {
         return {
@@ -95,8 +97,9 @@ export default {
     }*/
 
     methods: {
-        search (term) {
+        search (term) { // TODO: reset list when search field gets empties
             this.coins = this.coins.filter((coin) => {
+            this.$refs.searchField.changePage(0)
                 return coin.id.includes(term) || coin.symbol.includes(term)
             })
         },
