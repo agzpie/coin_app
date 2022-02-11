@@ -4,13 +4,10 @@
 
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <input type="text" id="inputCoin" class="form-control" placeholder="Search Coin"
-                name="coin-name"
-                required 
-            />
+           <input type="text" id="search" class="form-control" placeholder="Search Coin" v-model="term" @keypress.enter="search(term)" />
         </div>
         <div class="col-auto">
-            <span id="passwordHelpInline" class="form-text">
+            <span class="form-text">
                 Search by coin's name or symbol.
             </span>
         </div>
@@ -23,33 +20,20 @@
       Oopsie,<br />there was an error,<br />
       but don't worry and try again!
     </h4>-->
+
+    <ListElement 
+        v-if="coins"
+        :coin="computedCoinList"
+    /> 
+    <div class="pagination">
+
     <Pagination 
+        v-if="coins"
         :totalRecords="coins.length" 
         :perPageOptions="perPageOptions"
         v-model="pagination"    
     />
-    {{ pagination.page }}
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Coin</th>
-                <th scope="col">Price</th>
-                <th scope="col">Price Change</th>
-                <th scope="col">24 Volume</th>
-            </tr>
-        </thead>
-        <tbody>
-            <ListElement 
-                v-for="item in coins"
-                :key="item.id"
-                :coin="item"
-                :priceChange="item.price_change_percentage_24h"
-            />
-        </tbody>
-    </table>
-    
-    
+    </div>
 </div>
 </template>
 
@@ -61,32 +45,62 @@ import axios from "axios";
 const perPageOptions = [10, 25, 50]
 
 export default {
-  name: "App",
-  components: {
-    ListElement,
-    Pagination
-},
-  data: function () {
+    name: "App",
+    components: {
+        ListElement,
+        Pagination
+    },
+    data: function () {
         return {
             perPageOptions,
+            coins: undefined,
             pagination: { page: 1, perPage: perPageOptions[0] },
-            coins: [],
-            errors: [],
+        }
+    },
+    computed: {
+        computedCoinList () {
+            console.log("cos")
+            if (!this.coins) {
+                console.log("ERROR: Data is empty")
+                return []
+            }
+            else {
+                const firstIndex = (this.pagination.page - 1) * this.pagination.perPage
+                const lastIndex = this.pagination.page * this.pagination.perPage
+                return this.coins.slice(firstIndex, lastIndex)
+            }
+        }
+    },
 
+    // Fetch coin data
+    mounted () {
+        axios
+            .get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false')
+            .then(response => {
+                this.coins = response.data
+                console.log(this.coins)
+                })
+            .catch(error => console.log(error))
+    },
+
+   /* async mounted() {
+        try {
+        const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+        this.coins = response.data
+        console.log(this.coins)
+        console.log(this.coins.lastIndex)
+        } catch (e) {
+        this.errors.push(e)
+        }
+    }*/
+
+    methods: {
+        search (term) {
+            this.coins = this.coins.filter((coin) => {
+                return coin.id.includes(term) || coin.symbol.includes(term)
+            })
+        },
     }
-  },
-
-  // Fetches posts when the component is created.
-  async created() {
-    try {
-      const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
-      this.coins = response.data
-      console.log(this.coins)
-    } catch (e) {
-      this.errors.push(e)
-    }
-  }
-
 };
 </script>
 

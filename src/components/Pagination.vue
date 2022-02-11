@@ -1,20 +1,28 @@
 <template>
-  <section>
       <p class="pagination-container">
-          <img src="https://img.icons8.com/fluency-systems-filled/24/000000/double-left.png" @click="changePage(0)"/>
-          <img src="https://img.icons8.com/fluency-systems-filled/24/000000/back--v1.png" @click="changePage(-1)"/>
+          <img src="https://img.icons8.com/fluency-systems-filled/20/000000/double-left.png" @click="changePage(0)"/>
+          <img src="https://img.icons8.com/fluency-systems-filled/20/000000/back--v1.png" @click="changePage(-1)"/>
           <span> Page {{ page }} of {{ pages }}</span>
-          <img src="https://img.icons8.com/fluency-systems-filled/24/000000/forward--v1.png" @click="changePage(1)"/>
-          <img src="https://img.icons8.com/fluency-systems-filled/24/000000/double-right.png" @click="changePage(pages)"/>
+          <img src="https://img.icons8.com/fluency-systems-filled/20/000000/forward--v1.png" @click="changePage(1)"/>
+          <img src="https://img.icons8.com/fluency-systems-filled/20/000000/double-right.png" @click="changePage(pages)"/>
       </p>
-  </section>
+     <!-- <p>
+           <span
+                class="showing"
+                :class="perPage === amount && 'active'"
+                v-for="(amount, index) in perPageOptions"
+                :key="index"
+                @click="setPerPage(amount)"
+            >| {{amount}} | </span>
+      </p>
+      -->
 </template>
 
 <script>
 export default {
-    props: ['totalRecords', 'perPageOptions'],
+    props: ['totalRecords', 'perPageOptions' ],
 
-    data: function () {
+    data () {
         return {
             page: 1,
             perPage: this.perPageOptions[0]
@@ -31,6 +39,10 @@ export default {
         }
     },
     methods: {
+        setPerPage(amount) { // TO FIX: number of rows in the parent doesn't get updated
+            this.perPage = amount
+            this.$emit('input', {page: this.page, perPage: amount})
+        },
         changePage (val) {
             switch (val) {
                 case 0: this.page = 1; break;
@@ -38,13 +50,17 @@ export default {
                 case 1: this.page = this.page < this.pages ? this.page + 1 : this.page; break;
                 case this.pages: this.page = this.pages; break;
             }
-
-            this.$emit('input', { page: this.page })
+            this.$emit('update:modelValue', {   page: this.page, perPage: this.perPage })
         }
     }
 }
 </script>
 
 <style>
-
+.pagination-container {
+    margin: 0.5rem;
+    font-size: 0.95rem;
+    text-align: center;
+    width: 100%;
+}
 </style>
