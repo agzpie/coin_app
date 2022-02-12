@@ -2,7 +2,6 @@
 <section>
   
     <CoinDetails 
-        v-if="clicked"
         :coin="clickList()" 
     /> <!-- CoinDetails should be rendered on click with the method clickList and pass the coin object/element to CoinDetails -->
     <table class="table table-hover">
@@ -42,17 +41,20 @@
 </template>
 
 <script>
+//import { reactive } from "vue"
 import CoinDetails from "./CoinDetails.vue"
+//const state = reactive({ data: [] })
 
 export default {
     props: [ 'coin' ],
     components: {
     CoinDetails
-},
+    },
     data() {
         return {
             clicked: false,
-            isGreen: true
+            isGreen: true,
+            row: 'a',
         }
     },
 
@@ -66,16 +68,15 @@ export default {
     },
 
     methods: {
-        clickList: function (row, index) {
-            console.log("clicked ", row, index) // TO FIX: row and index are undefined
-            this.clicked = !this.clicked
+        clickList: function (row) {
+            console.log("clicked ", row) // TO FIX: row and index are undefined
+            //this.clicked = this.clicked
+            //this.state = row;
             return {
-                row: this.row,
-                index: this.index
+                row: row,
             }
         }
     }
-
 }
 </script>
 

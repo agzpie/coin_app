@@ -3,15 +3,15 @@
    
         <tr>
             <th scope="col">Name</th>
-            <td>{{ coin.id }}</td>
+            <td></td>
         </tr>
         <tr>
             <th scope="col">Symbol</th>
-            <td>{{ coin.symbol }}</td>
+            <td></td>
         </tr>
         <tr>
             <th scope="col">Logo</th>
-            <td>{{ coin.image }}</td>
+            <td></td>
         </tr>
         
 </table>
@@ -20,11 +20,13 @@
 <script>
 export default {
     props: {
-        coin: { // TO FIX: data isn't passed properly from the parent
-            row: [],
-            index: []
+        data: { // TO FIX: data isn't passed properly from the parent
+            type: Object
         }
     },
+    onMounted: function () {
+        console.log("COIN" + this.data)
+    }
 
 }
 </script>
