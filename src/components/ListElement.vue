@@ -2,8 +2,10 @@
 <section>
   
     <CoinDetails 
-        :coin="clickList()" 
+        :id="coin.id"
+        v-if="isClicked" 
     /> <!-- CoinDetails should be rendered on click with the method clickList and pass the coin object/element to CoinDetails -->
+    
     <table class="table table-hover">
         <thead>
             <tr>
@@ -14,8 +16,9 @@
                 <th scope="col">24 Volume</th>
             </tr>
         </thead>
+
         <tbody>
-            <tr v-for="(row, index) in coin" :key="index" @click="clickList(row, index)">
+            <tr v-for="(row, index) in coin" :key="index" @click="clickList(row)">
                 <td>
                 {{ row.market_cap_rank }}
                 </td>
@@ -41,32 +44,44 @@
 </template>
 
 <script>
-//import { reactive } from "vue"
+import { reactive, ref, toRefs } from "vue";
 import CoinDetails from "./CoinDetails.vue"
-//const state = reactive({ data: [] })
 
 export default {
-    props: [ 'coin' ],
+    props: {
+        coin: Object
+    },
     components: {
     CoinDetails
     },
+
+    setup() {
+        const isClicked = ref(false);
+        const state = reactive({ data: [] })
+
+
+        function clickList(row) {
+            if(isClicked.value)
+                return isClicked.value = !isClicked.value
+            console.log(row);
+            isClicked.value = !isClicked.value;
+            state.data = row;
+        }
+
+        return {
+            isClicked,
+            clickList,
+            ...toRefs(state)
+        }
+    }
+
+    /*
     data() {
         return {
             clicked: false,
-            isGreen: true,
             row: 'a',
         }
     },
-
-    computed: {
-        computedClass() {
-            if ( this.coin.price_change_percentage_24h >= 0) {
-                return 'green'
-            }
-            return 'red'
-        },
-    },
-
     methods: {
         clickList: function (row) {
             console.log("clicked ", row) // TO FIX: row and index are undefined
@@ -76,7 +91,7 @@ export default {
                 row: row,
             }
         }
-    }
+    }*/
 }
 </script>
 

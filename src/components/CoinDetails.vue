@@ -3,15 +3,15 @@
    
         <tr>
             <th scope="col">Name</th>
-            <td></td>
+            <td>{{ id }}</td>
         </tr>
         <tr>
             <th scope="col">Symbol</th>
-            <td></td>
+            <td>{{ id }}</td>
         </tr>
         <tr>
             <th scope="col">Logo</th>
-            <td></td>
+            <td>{{ id }}</td> 
         </tr>
         
 </table>
@@ -20,14 +20,13 @@
 <script>
 export default {
     props: {
-        data: { // TO FIX: data isn't passed properly from the parent
-            type: Object
-        }
-    },
-    onMounted: function () {
-        console.log("COIN" + this.data)
+        id: Proxy
     }
-
+    /*
+    setup(props) {
+        const { title } = toRefs(props)
+        console.log(title.value)
+    }*/
 }
 </script>
 
