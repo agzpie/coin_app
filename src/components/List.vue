@@ -1,7 +1,6 @@
 <template>
 <div>
   <h2 class="header1">Which Coin would you like to see?</h2>
-
     <div class="row g-3 align-items-center">
         <div class="col-auto">
            <input type="text" id="search" class="form-control" placeholder="Search Coin" v-model="term" @keypress.enter="search(term)" />
@@ -39,7 +38,7 @@
 </template>
 
 <script>
-// TODO: reset coin list!!!! And detailed view
+// TODO: reset coin list and detailed view
 import ListElement from "./ListElement.vue";
 import Pagination from "./Pagination.vue";
 import axios from "axios";
@@ -61,7 +60,6 @@ export default {
     },
     computed: {
         computedCoinList () {
-            console.log("cos")
             if (!this.coins) {
                 console.log("ERROR: Data is empty")
                 return []

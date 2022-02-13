@@ -59,12 +59,11 @@ export default {
         const isClicked = ref(false);
         const state = reactive({ data: [] })
 
-
         function clickList(row) {
             if(isClicked.value)
                 return isClicked.value = !isClicked.value
             console.log(row);
-            isClicked.value = !isClicked.value;
+            isClicked.value = !isClicked.value; // TO FIX: hide the details only if the same row is clicked
             state.data = row;
         }
 
