@@ -1,7 +1,12 @@
 <template>
   <div class="container-md">
     <Suspense>
-      <List />
+      <template #default>
+        <List />
+      </template>
+      <template #fallback>
+        <div>Loading...</div>
+      </template>
     </Suspense>
       
 

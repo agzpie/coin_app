@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs } from "vue";
+import { reactive, ref } from "vue";
 import CoinDetails from "./CoinDetails.vue"
 
 export default {
@@ -52,7 +52,7 @@ export default {
         coin: Object
     },
     components: {
-    CoinDetails
+        CoinDetails
     },
 
     setup() {
@@ -70,7 +70,6 @@ export default {
         return {
             isClicked,
             clickList,
-            ...toRefs(state)
         }
     }
 

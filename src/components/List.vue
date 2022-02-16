@@ -12,27 +12,19 @@
         </div>
     </div>
 
-    <!--<h4 v-if="success == true">
-      The most popular coinzz:
-    </h4>
-    <h4 v-else-if="success == false" class="error-message">
-      Oopsie,<br />there was an error,<br />
-      but don't worry and try again!
-    </h4>-->
-
     <ListElement 
         v-if="coins"
-        :coin="computedCoinList"
+        :coin="computedCoinList()"
     /> 
+   
     <div class="pagination">
-
-    <Pagination 
-        v-if="coins"
-        :totalRecords="coins.length" 
-        :perPageOptions="perPageOptions"
-        v-model="pagination" 
-        ref="searchField"   
-    />
+        <Pagination 
+            v-if="coins"
+            :totalRecords="coins.data.length" 
+            :perPageOptions="perPageOptions"
+            v-model="pagination" 
+            ref="searchField"   
+        />
     </div>
 </div>
 </template>
@@ -42,8 +34,9 @@
 import ListElement from "./ListElement.vue";
 import Pagination from "./Pagination.vue";
 import axios from "axios";
+import { reactive, ref } from "vue";
 
-const perPageOptions = [10, 25, 50]
+//const perPageOptions = [10, 25, 50]
 
 export default {
     name: "App",
@@ -51,6 +44,74 @@ export default {
         ListElement,
         Pagination,
     },
+
+    async setup() {
+        const coins = reactive({ data: [] })
+        const perPageOptions = ref([10, 25, 50])
+        const pagination = reactive( { page: 1, perPage: perPageOptions.value[0] })
+
+        
+        const result = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+        coins.data = result.data
+        
+
+        function computedCoinList() {
+            if (!coins) {
+                console.log("ERROR: Data is empty")
+                return []
+            }
+            else {
+                const firstIndex = (pagination.page - 1) * pagination.perPage
+                const lastIndex = pagination.page * pagination.perPage
+                console.log("yo")
+                return coins.data.slice(firstIndex, lastIndex)
+            }
+        }
+
+        /*const computedCoinList = computed(() => {
+            if (!coins) {
+                console.log("ERROR: Data is empty")
+                return []
+            }
+            else {
+                const firstIndex = (pagination.page - 1) * pagination.perPage
+                const lastIndex = pagination.page * pagination.perPage
+                console.log("yo")
+                return coins.data.slice(firstIndex, lastIndex)
+            }
+        })*/
+
+        return {
+            coins,
+            perPageOptions,
+            pagination,
+            computedCoinList
+        }
+    },
+
+   /* async mounted() {
+        try {
+        const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+        this.coins = response.data
+        console.log(this.coins)
+        } catch (e) {
+        this.errors.push(e)
+        }
+    }
+
+/*
+    mounted() {
+        axios
+            .get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false')
+            .then(response => {
+                this.coins.data = response.data
+                console.log(this.coins.data)
+                })
+            .catch(error => console.log(error))
+    }
+
+
+    /*
     data: function () {
         return {
             perPageOptions,
@@ -94,6 +155,7 @@ export default {
         }
     }*/
 
+/*
     methods: {
         search (term) { // TODO: reset list when search field gets empties
             this.coins = this.coins.filter((coin) => {
@@ -101,7 +163,7 @@ export default {
                 return coin.id.includes(term) || coin.symbol.includes(term)
             })
         },
-    }
+    } */
 };
 </script>
 
